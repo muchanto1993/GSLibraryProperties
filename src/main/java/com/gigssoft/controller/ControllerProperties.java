@@ -86,7 +86,11 @@ public class ControllerProperties {
         OutputStream output = null;
 
         try {
-            output = new FileOutputStream(this.CreateDirectory().toString() + "\\" + getFilename());
+            try {
+                output = new FileOutputStream(this.CreateDirectory().toString() + "\\" + getFilename());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
             // Get a set of the entries
             Set set = mapProperties.entrySet();
@@ -125,26 +129,30 @@ public class ControllerProperties {
         InputStream input = null;
 
         try {
-            input = new FileInputStream(this.CreateDirectory().toString() + "\\" + getFilename());
+//            try {
+                input = new FileInputStream(this.CreateDirectory().toString() + "\\" + getFilename());
 
-            if (input == null) {
-                System.out.println("Sorry, unable to find " + getFilename());
-                JOptionPane.showMessageDialog(null, "Sorry, unable to find " + filename, "Information", JOptionPane.INFORMATION_MESSAGE);
-                System.exit(0);
-            }
+                // load a properties file
+                prop.load(input);
+//            } catch (Exception e) {
+//                System.out.println("Sorry, unable to find " + getFilename());
+//                JOptionPane.showMessageDialog(null, "Sorry, unable to find " + filename, "Information", JOptionPane.INFORMATION_MESSAGE);
+//                System.exit(0);
+//            }
 
-            // load a properties file
-            prop.load(input);
-        } catch (IOException io) {
-            JOptionPane.showMessageDialog(null, io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//            if (input == null) {
+//
+//            }
+        } catch (Exception io) {
+            JOptionPane.showMessageDialog(null, "Err : " + io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             io.printStackTrace();
             System.exit(0);
         } finally {
             if (input != null) {
                 try {
                     input.close();
-                } catch (IOException io) {
-                    JOptionPane.showMessageDialog(null, io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception io) {
+                    JOptionPane.showMessageDialog(null, "Err : " + io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     io.printStackTrace();
                     System.exit(0);
                 }
