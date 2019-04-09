@@ -30,6 +30,8 @@ public class App {
         hm.put("dbuser", "mkyong");
 
         ControllerProperties cp = new ControllerProperties();
+        cp.setDirectory("manual");
+        cp.setFilename("manual.properties");
 
         System.out.println("-WriteToProperties Begin-");
         cp.WriteToProperties(hm);

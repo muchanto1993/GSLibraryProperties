@@ -26,13 +26,14 @@ import javax.swing.JOptionPane;
  */
 public class ControllerProperties {
 
-    private String filename = "auto-config.properties";
-    private String directory = "file-config";
-
-    public ControllerProperties() {
-    }
+    private String filename = "";
+    private String directory = "";
 
     public String getFilename() {
+        if (filename == "") {
+            filename = "auto-config.properties";
+        }
+
         return filename;
     }
 
@@ -41,6 +42,10 @@ public class ControllerProperties {
     }
 
     public String getDirectory() {
+        if (directory == "") {
+            directory = "file-config";
+        }
+
         return directory;
     }
 
@@ -48,6 +53,7 @@ public class ControllerProperties {
         this.directory = directory;
     }
 
+    /* Main Process */
     public String CheckLocation() {
         String workingDir = System.getProperty("user.dir");
         System.out.println("Current Working Directory : " + workingDir);
@@ -56,7 +62,7 @@ public class ControllerProperties {
     }
 
     public String CreateDirectory() {
-        String pathDirectory = this.CheckLocation() + "\\" + directory;
+        String pathDirectory = this.CheckLocation() + "\\" + getDirectory();
         Path path = Paths.get(pathDirectory);
 
         //if directory exists?
@@ -68,6 +74,7 @@ public class ControllerProperties {
                 //fail to create directory
                 JOptionPane.showMessageDialog(null, io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 io.printStackTrace();
+                System.exit(0);
             }
         }
 
@@ -79,7 +86,7 @@ public class ControllerProperties {
         OutputStream output = null;
 
         try {
-            output = new FileOutputStream(this.CreateDirectory().toString() + "\\" + filename);
+            output = new FileOutputStream(this.CreateDirectory().toString() + "\\" + getFilename());
 
             // Get a set of the entries
             Set set = mapProperties.entrySet();
@@ -95,10 +102,11 @@ public class ControllerProperties {
 
             // save properties to project root folder
             prop.store(output, null);
-            System.out.println("Success Write To Properties");
+            System.out.println("Success Write To Properties, file name : " + getFilename());
         } catch (IOException io) {
             JOptionPane.showMessageDialog(null, io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             io.printStackTrace();
+            System.exit(0);
         } finally {
             if (output != null) {
                 try {
@@ -106,6 +114,7 @@ public class ControllerProperties {
                 } catch (IOException io) {
                     JOptionPane.showMessageDialog(null, io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     io.printStackTrace();
+                    System.exit(0);
                 }
             }
         }
@@ -116,12 +125,10 @@ public class ControllerProperties {
         InputStream input = null;
 
         try {
-            input = new FileInputStream(this.CreateDirectory().toString() + "\\" + filename);
+            input = new FileInputStream(this.CreateDirectory().toString() + "\\" + getFilename());
 
-//            String filename = "app-config.properties";
-//            input = getClass().getClassLoader().getResourceAsStream(filename);
             if (input == null) {
-                System.out.println("Sorry, unable to find " + filename);
+                System.out.println("Sorry, unable to find " + getFilename());
                 JOptionPane.showMessageDialog(null, "Sorry, unable to find " + filename, "Information", JOptionPane.INFORMATION_MESSAGE);
                 System.exit(0);
             }
@@ -131,6 +138,7 @@ public class ControllerProperties {
         } catch (IOException io) {
             JOptionPane.showMessageDialog(null, io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             io.printStackTrace();
+            System.exit(0);
         } finally {
             if (input != null) {
                 try {
@@ -138,6 +146,7 @@ public class ControllerProperties {
                 } catch (IOException io) {
                     JOptionPane.showMessageDialog(null, io.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     io.printStackTrace();
+                    System.exit(0);
                 }
             }
         }
