@@ -30,12 +30,12 @@ public class App {
         hm.put("dbuser", "mkyong");
 
         ControllerProperties cp = new ControllerProperties();
-        cp.setDirectory("manual");
-        cp.setFilename("manuala.properties");
+        //cp.setDirectory("manual");
+        //cp.setFilename("manuala.properties");
 
-//        System.out.println("-WriteToProperties Begin-");
-//        cp.WriteToProperties(hm);
-//        System.out.println("-WriteToProperties End-");
+        //System.out.println("-WriteToProperties Begin-");
+        //cp.WriteToProperties(hm);
+        //System.out.println("-WriteToProperties End-");
 
         System.out.println("-LoadAProperties Begin-");
         Properties prop = cp.LoadAProperties();
