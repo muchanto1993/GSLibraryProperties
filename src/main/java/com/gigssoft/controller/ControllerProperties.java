@@ -5,8 +5,10 @@
  */
 package com.gigssoft.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -74,7 +76,7 @@ public class ControllerProperties {
                 JOptionPane.showMessageDialog(null, "Err : " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
             }
-        }else{
+        } else {
             System.out.println("Directory is Exist");
         }
 
@@ -117,7 +119,7 @@ public class ControllerProperties {
         }
     }
 
-    public Properties LoadAProperties() {
+    public Properties LoadCustomProperties() {
         Properties prop = new Properties();
         InputStream input = null;
 
@@ -142,5 +144,70 @@ public class ControllerProperties {
 
         return prop;
     }
+
+    public Properties LoadDefaultProperties() {
+        Properties prop = new Properties();
+
+        this.setFilename("config.properties");
+
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(this.getFilename())) {
+
+            if (input == null) {
+                System.out.println("Sorry, unable to find " + this.getFilename());
+                System.exit(0);
+            }
+
+            prop.load(input);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Err : " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+
+        return prop;
+    }
+
     /* Main Method - End*/
+    private static final String FILE_DIR = "c:\\folder";
+    private static final String FILE_TEXT_EXT = ".jpg";
+
+    public void listFile(String folder, String ext) {
+
+        GenericExtFilter filter = new GenericExtFilter(ext);
+
+        File dir = new File(folder);
+
+        if (dir.isDirectory() == false) {
+            System.out.println("Directory does not exists : " + FILE_DIR);
+            return;
+        }
+
+        // list out all the file name and filter by the extension
+        String[] list = dir.list(filter);
+
+        if (list.length == 0) {
+            System.out.println("no files end with : " + ext);
+            return;
+        }
+
+        for (String file : list) {
+            String temp = new StringBuffer(FILE_DIR).append(File.separator)
+                    .append(file).toString();
+            System.out.println("file : " + temp);
+        }
+    }
+
+    // inner class, generic extension filter
+    public class GenericExtFilter implements FilenameFilter {
+
+        private final String ext;
+
+        public GenericExtFilter(String ext) {
+            this.ext = ext;
+        }
+
+        @Override
+        public boolean accept(File dir, String name) {
+            return (name.endsWith(ext));
+        }
+    }
 }
